@@ -5,3 +5,6 @@ export * from "./Onboarding";
 export * from "./Recent";
 export * from "./Root";
 export * from "./Shared";
+export * from "./File";
+export * from "./Media";
+

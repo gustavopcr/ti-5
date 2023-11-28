@@ -1,11 +1,12 @@
 import { Button } from "@mui/material";
-import { IconButton } from '@mui/material';
+import { IconButton, Dialog, Box, Typography } from '@mui/material';
 import React from "react";
 import { useNavigate } from "react-router-dom";
 import { BasePage } from "../BasePage";
 import { useState, useEffect } from 'react';
 import {Items} from "../../hooks/useFormat/types";
 import Item from "../Item";
+import {File} from "../../pages"
 
 const url = 'http://localhost:8080/arquivos?filePath='
 
@@ -14,12 +15,13 @@ const handleFile = (url:string, newPath:string) =>{
 }
 export const Root = () => {
 
-  const navigate = useNavigate();
+  const navigation = useNavigate();
   const [arquivos, setArquivos] = useState([]);
   const [filePath, setFilePath] = useState<String | null>('');
 
   //mudar de Items para Item dps. Nome no plural é ruim
   const foo = ( data:Items ) => {
+    console.log("data: " + data.type)
     if(data.isDir){
       if(filePath.trim() == ''){
         setFilePath(data.name);
@@ -43,16 +45,31 @@ export const Root = () => {
         }
     }
   }
-  const bt = () =>{
-    if(filePath.trim() !== ''){
-      return(<Button onClick={handleVoltar}></Button>)
+
+  const handleFile = async (data:Items)=>{
+    try{
+      console.log("TYPE: " + data.type)
+      if(data.type == 'text'){
+        console.log('/file')
+        navigation('/file', { state: {name: data.name, filePath: filePath}} );
+      }else if(data.type == 'image' || data.type == 'video'){
+        console.log('/media')
+        navigation('/media', { state: {name: data.name, filePath: filePath, type: data.type, ext: data.ext}} );
+      }
+    }catch(err){
+      console.log(err);
+    }
+  };
+
+  const bt = (data:Items) =>{
+    if(data.isDir){
+      return(<Item i={data} foo={foo}></Item>)
     }else{
-      return(<></>)
+      return(<Item i={data} foo={handleFile}></Item>)
     }
   }
 
   useEffect(() => {
-    
     fetch(url+filePath)
        .then((res) => res.json())
        .then((data) => {
@@ -67,8 +84,8 @@ export const Root = () => {
     <BasePage>
     <div>
       <Button onClick={handleVoltar}>Voltar</Button>
-      { arquivos.map(  (data:Items) =>
-        <Item i={data} foo={foo}></Item>
+      { arquivos.map(  (data:Items) =>        
+        bt(data)
       )}
     </div>
     </BasePage>

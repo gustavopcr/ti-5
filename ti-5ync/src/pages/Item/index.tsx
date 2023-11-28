@@ -21,4 +21,3 @@ export default function Item(props: {i:Items, foo(i:Items):void}){
         
     )
 }
-

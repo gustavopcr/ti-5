@@ -9,5 +9,7 @@ export interface Items {
   mtime: Date,
   atime: Date,
   ctime: Date,
-  isDir: boolean
+  isDir: boolean,
+  type: String,
+  ext: String,
 }

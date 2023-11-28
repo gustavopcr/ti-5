@@ -6,15 +6,16 @@ import { ThemeProvider } from "@mui/material";
 import { Theme } from "./Theme";
 import CssBaseline from "@mui/material/CssBaseline";
 import "./i18n";
+import {File} from "../src/pages"
 
 const root = createRoot(document.getElementById("root"));
 
 root.render(
-  <StrictMode>
-    <ThemeProvider theme={Theme}>
-      <CssBaseline />
+    <StrictMode>
+      <ThemeProvider theme={Theme}>
+        <CssBaseline />
 
-      <RouterProvider router={Router} />
-    </ThemeProvider>
-  </StrictMode>
+        <RouterProvider router={Router} />
+      </ThemeProvider>
+    </StrictMode> 
 );

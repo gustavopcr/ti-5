@@ -1,5 +1,5 @@
 import { RouteObject } from "react-router-dom";
-import { Favorites, Images, Onboarding, Recent, Root, Shared } from "../pages";
+import { Favorites, Images, Onboarding, Recent, Root, Shared, File, Media } from "../pages";
 
 export const RoutesDefinition: RouteObject[] = [
   {
@@ -26,4 +26,12 @@ export const RoutesDefinition: RouteObject[] = [
     path: "/shared",
     Component: Shared,
   },
+  {
+    path: "/file",
+    Component: File,
+  },
+  {
+    path: "/media",
+    Component: Media,
+  }
 ];
