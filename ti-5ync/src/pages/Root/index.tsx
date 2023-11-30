@@ -3,21 +3,55 @@ import { IconButton, Dialog, Box, Typography } from '@mui/material';
 import React from "react";
 import { useNavigate } from "react-router-dom";
 import { BasePage } from "../BasePage";
-import { useState, useEffect } from 'react';
+import { useState, useEffect, ChangeEvent, FormEvent } from 'react';
 import {Items} from "../../hooks/useFormat/types";
 import Item from "../Item";
 import {File} from "../../pages"
+import Modal from 'react-modal';
 
 const url = 'http://localhost:8080/arquivos?filePath='
 
-const handleFile = (url:string, newPath:string) =>{
-  url += newPath;
-}
-export const Root = () => {
+export const Root: React.FC = () => {
 
   const navigation = useNavigate();
   const [arquivos, setArquivos] = useState([]);
   const [filePath, setFilePath] = useState<String | null>('');
+  const [file, setFile] = useState<File | null>(null);
+  const [modalIsOpen, setModalIsOpen] = useState(false);
+
+  const handleFileChange = (event: ChangeEvent<HTMLInputElement>) => {
+    if (event.target.files && event.target.files.length > 0) {
+      setFile(event.target.files[0]);
+    }
+  };
+
+  const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    console.log('aloalaoPOST')
+    if (!file) {
+      alert('Please select a file.');
+      return;
+    }
+
+    const formData = new FormData();
+    formData.append('file', file);
+
+    try {
+      const response = await fetch('http://localhost:8080/upload', {
+        method: 'POST',
+        body: formData,
+      });
+
+      if (response.ok) {
+        alert('File uploaded successfully.');
+      } else {
+        alert('File upload failed.');
+      }
+    } catch (error) {
+      console.error('Error:', error);
+      alert('Error uploading the file.');
+    }
+  };
 
   //mudar de Items para Item dps. Nome no plural é ruim
   const foo = ( data:Items ) => {
@@ -83,6 +117,23 @@ export const Root = () => {
   return (
     <BasePage>
     <div>
+      <div>
+        <button onClick={() => setModalIsOpen(true)}>Open Modal</button>
+        <Modal
+          isOpen={modalIsOpen}
+          onRequestClose={() => setModalIsOpen(false)}
+          ariaHideApp={false} // For accessibility, in a real app consider proper configuration
+        >
+          <h2>Modal Form</h2>
+                <h1>File Upload</h1>
+        <form onSubmit={handleSubmit}>
+          <input type="file" onChange={handleFileChange} />
+          <button type="submit">Upload</button>
+        </form>
+          <button onClick={() => setModalIsOpen(false)}>Close Modal</button>
+        </Modal>
+      </div>
+      
       <Button onClick={handleVoltar}>Voltar</Button>
       { arquivos.map(  (data:Items) =>        
         bt(data)
