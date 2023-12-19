@@ -9,13 +9,13 @@ import Item from "../Item";
 import {File} from "../../pages"
 import Modal from 'react-modal';
 
-const url = 'http://localhost:8080/arquivos?filePath='
 
+const url = 'http://localhost:8080/arquivos?filePath='
 export const Root: React.FC = () => {
 
   const navigation = useNavigate();
   const [arquivos, setArquivos] = useState([]);
-  const [filePath, setFilePath] = useState<String | null>('');
+  const [filePath, setFilePath] = useState<String>('');
   const [file, setFile] = useState<File | null>(null);
   const [modalIsOpen, setModalIsOpen] = useState(false);
 
@@ -35,9 +35,10 @@ export const Root: React.FC = () => {
 
     const formData = new FormData();
     formData.append('file', file);
-
+    console.log('teste: ');
+    console.log('http://localhost:8080/upload?filePath=${filePath}')
     try {
-      const response = await fetch('http://localhost:8080/upload', {
+      const response = await fetch(`http://localhost:8080/upload?filePath=${filePath}`, {
         method: 'POST',
         body: formData,
       });
@@ -60,7 +61,7 @@ export const Root: React.FC = () => {
       if(filePath.trim() == ''){
         setFilePath(data.name);
       }else{
-        setFilePath(`${filePath}/${data.name}`);
+        setFilePath(`${filePath}${data.name}/`);
       }
     }else{
       //abrir para ver arquivo
@@ -133,7 +134,7 @@ export const Root: React.FC = () => {
           <button onClick={() => setModalIsOpen(false)}>Close Modal</button>
         </Modal>
       </div>
-      
+
       <Button onClick={handleVoltar}>Voltar</Button>
       { arquivos.map(  (data:Items) =>        
         bt(data)

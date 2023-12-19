@@ -1,18 +1,19 @@
-import React from "react";
+import React from "react"
 //import { useState, useEffect } from 'react';
 import { BasePage } from "../BasePage";
-import { Box } from "@mui/material";
-import { useLocation } from 'react-router-dom';
+import { Box, Grid, makeStyles } from "@mui/material";
+import { useLocation, useNavigate } from 'react-router-dom';
 import {Items} from "../../hooks/useFormat/types";
-/*
-<video width="640" height="360" controls>
-            <source src={`http://localhost:8080/video?filePath=${location.state.filePath}/${location.state.name}`} type="video/mp4" />
-            Your browser does not support the video tag.
-          </video>
-          */
+
+
 
 export const Media = ( ) =>  {
   const location = useLocation();
+  const navigation = useNavigate();
+
+  const handleGoBack = () => {
+    window.history.back();
+  };
   const teste = (type:String)=>{
     if(type=='image'){
       return(
@@ -31,6 +32,7 @@ export const Media = ( ) =>  {
 
   return(
     <BasePage>
+        <button onClick={handleGoBack}>Go Back</button>
         <Box
           p={2}
           height="100vh"

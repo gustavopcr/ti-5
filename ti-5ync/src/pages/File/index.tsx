@@ -2,12 +2,18 @@ import React from "react";
 //import { useState, useEffect } from 'react';
 import { BasePage } from "../BasePage";
 import { Box } from "@mui/material";
-import { useLocation } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 
 
 export const File = ( ) =>  {
   const location = useLocation();
   const [data, setData] = React.useState({'type': 'teste', 'data': ''});
+  const navigation = useNavigate();
+
+  const handleGoBack = () => {
+    window.history.back();
+  };
+  
   React.useEffect(() => {
     fetch(`http://localhost:8080/arquivos/${location.state.name}?filePath=${location.state.filePath}`)
        .then((res) => res.json())
@@ -20,6 +26,7 @@ export const File = ( ) =>  {
   }, []);
   return(
     <BasePage>
+      <button onClick={handleGoBack}>Go Back</button>
         <Box
           p={2}
           height="100vh"
@@ -32,9 +39,6 @@ export const File = ( ) =>  {
             {data?.data}
           </Box>
 
-          <Box p={3} width="100%" borderRadius={6} bgcolor="background.paper">
-            aaa
-          </Box>
         </Box>
     </BasePage>
   );
